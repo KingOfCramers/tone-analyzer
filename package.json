@@ -1,0 +1,13 @@
+{
+  "name": "toneAnalyzer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:start": "nodemon"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ibm-watson": "^5.7.1"
+  }
+}
