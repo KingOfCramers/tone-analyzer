@@ -1,5 +1,5 @@
 .env
 node_modules/
 data.json
-result.json
+src/result.json
 DS_Store

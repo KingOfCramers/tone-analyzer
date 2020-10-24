@@ -59,58 +59,56 @@ const analyze = async () => {
   }
 
   for (const interview of data) {
-    const lines = interview.pompeoLines;
-    // For development, to not exhaust our API calls, only get first four lines
+    const text = interview.pompeoLines.join(" ");
+    //For development, to not exhaust our API calls, only get first four lines
+    //for (const [i, text] of lines.entries()) {
+    const toneParams = {
+      toneInput: { text },
+      content_type: "application/json",
+    };
 
-    for (const [i, text] of lines.entries()) {
-      const toneParams = {
-        toneInput: { text },
-        content_type: "application/json",
+    let response: Response<ToneAnalysis>;
+    try {
+      response = await toneAnalyzer.tone(toneParams);
+    } catch (err) {
+      console.error(err);
+      process.exit();
+    }
+
+    if (response.status === 200) {
+      const toneAnalysisResult = response.result;
+      const document: InterviewWithSentiment = {
+        ...interview,
+        sentiment: toneAnalysisResult,
       };
 
-      let response: Response<ToneAnalysis>;
-      try {
-        response = await toneAnalyzer.tone(toneParams);
-      } catch (err) {
-        console.error(err);
-        process.exit();
-      }
-
-      if (response.status === 200) {
-        const toneAnalysisResult = response.result;
-        const document: InterviewWithSentiment = {
-          ...interview,
-          sentiment: toneAnalysisResult,
-        };
-
-        fs.readFile(
-          path.resolve(__dirname, "result.json"),
-          "utf8",
-          function readFileCallback(err, data) {
-            if (err) {
-              console.log(err);
-            } else {
-              const obj: SentimentData = JSON.parse(data); // Convert to object.
-              obj.data.push(document); //add some data
-              const json = JSON.stringify(obj); //convert it back to json
-              try {
-                fs.writeFileSync(
-                  path.resolve(__dirname, "result.json"),
-                  json,
-                  "utf8"
-                );
-                console.log("Wrote chunk to file");
-              } catch (err) {
-                console.error(`Could not write chunk to file.`);
-                console.error(err);
-              }
+      fs.readFile(
+        path.resolve(__dirname, "result.json"),
+        "utf8",
+        function readFileCallback(err, data) {
+          if (err) {
+            console.log(err);
+          } else {
+            const obj: SentimentData = JSON.parse(data); // Convert to object.
+            obj.data.push(document); //add some data
+            const json = JSON.stringify(obj); //convert it back to json
+            try {
+              fs.writeFileSync(
+                path.resolve(__dirname, "result.json"),
+                json,
+                "utf8"
+              );
+              console.log("Wrote chunk to file");
+            } catch (err) {
+              console.error(`Could not write chunk to file.`);
+              console.error(err);
             }
           }
-        );
-      } else {
-        console.error(`Failed to fetch with status code ${response.status}`);
-        console.error(response.statusText);
-      }
+        }
+      );
+    } else {
+      console.error(`Failed to fetch with status code ${response.status}`);
+      console.error(response.statusText);
     }
   }
 };
