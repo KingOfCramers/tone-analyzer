@@ -1,4 +1,4 @@
-🏛️ State Department Tone Analysis
+# 🏛️ State Department Tone Analysis
 
 This application connects to IBM Watson for tone analysis of the Secretary of State's media appearances. The output file, result.json, is the information from each interview: tags, text, pompeoText (only when Pompeo is speaking), interviewerText (when the interviewer is speaking) and then analysis from IBM.
 
