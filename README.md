@@ -1,6 +1,8 @@
-# Tone-Analyzer
+🏛️ State Department Tone Analysis
 
-This is a template application for tone analysis using IBM-Watson.
+This application connects to IBM Watson for tone analysis of the Secretary of State's media appearances. The output file, result.json, is the information from each interview: tags, text, pompeoText (only when Pompeo is speaking), interviewerText (when the interviewer is speaking) and then analysis from IBM.
+
+The output from that function is a large object with two main subdivisions: document and sentence tones. The document tones consider all of Pompeo's lines in their entirety.
 
 ## Installation
 
